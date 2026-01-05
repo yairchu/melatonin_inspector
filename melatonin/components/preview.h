@@ -257,6 +257,7 @@ namespace melatonin
             colorPicking = false;
         }
 
+    public:
         static void drawTimingText (juce::Graphics& g, juce::Rectangle<int> bounds, double value, bool disabled = false)
         {
             auto text = timingWithUnits (disabled ? 0 : value);
@@ -274,6 +275,7 @@ namespace melatonin
             g.drawText (text, bounds, juce::Justification::topLeft);
         }
 
+    private:
         static juce::String timingWithUnits (double value)
         {
             double ms = value * 1000;

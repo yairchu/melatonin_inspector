@@ -130,9 +130,21 @@ namespace melatonin
             auto name = componentString (component);
             auto font = InspectorLookAndFeel::getInspectorFont (15, juce::Font::FontStyleFlags::plain);
 
-            g.setFont (font);
+            auto timingArea = itemArea.removeFromRight (60);
 
+            g.setFont (font);
             g.drawText (name, textIndent, itemArea.getY(), w - textIndent, itemArea.getHeight(), juce::Justification::left, true);
+
+            double timing = 0.0;
+            std::function<void (juce::Component*)> collectTiming = [&] (juce::Component* c) {
+                if (! c->getProperties().contains ("timingMax"))
+                    return;
+                timing += (double) c->getProperties()["timingMax"];
+                for (auto child : c->getChildren())
+                    collectTiming (child);
+            };
+            collectTiming (component);
+            Preview::drawTimingText (g, timingArea, timing, false);
         }
 
         // must override to set the disclosure triangle color
